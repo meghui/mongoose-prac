@@ -1,7 +1,7 @@
 const Course = require('../models/course');
 const Joi = require('joi');
 
-//curring function
+// curring function
 // function tryCatch(routeHandler) {
 //   return (req, res, next) => {
 //     try {
@@ -11,7 +11,6 @@ const Joi = require('joi');
 //     }
 //   };
 // }
-
 
 async function getAllCourses(req, res) {
   // db.courses.find()
@@ -37,21 +36,24 @@ async function getAllCourses(req, res) {
   //   // handle result
   // })
 }
+
 async function getCourseById(req, res) {
-	const { id } = req.params;
-    // .find({_id:id})
-    //todo populate  use populate for retrieve student data
-    const course = await Course.findById(id).exec();
-    if (!course) {
-      return res.status(404).json({ error: "course not found" });
-    }
-    return res.json(course);
+  const { id } = req.params;
+  // .find({_id:id})
+  // use populate for retrieve student data
+  const course = await Course.findById(id).exec();
+  if (!course) {
+    return res.status(404).json({ error: 'course not found' });
+  }
+  return res.json(course);
 }
 
 async function addCourse(req, res) {
+  // const { code, name, description } = req.body;
   // validate data
   const schema = Joi.object({
     name: Joi.string().required(),
+    // name: Joi.string().email().required()
     // 以字母开头，以数字结尾
     // COMP1001, SCI2002
     code: Joi.string()
@@ -59,6 +61,8 @@ async function addCourse(req, res) {
       .required(),
     description: Joi.string(),
   });
+
+  // try {
   const { code, name, description } = await schema.validateAsync(req.body, {
     allowUnknown: true,
     stripUnknown: true,
@@ -85,7 +89,6 @@ async function addCourse(req, res) {
     return res.sendStatus(409);
   }
 
-  // validate data -不依赖于mo
   const course = new Course({
     name,
     code,
@@ -98,40 +101,39 @@ async function addCourse(req, res) {
 async function updateCourseById(req, res) {
   const { id } = req.params;
   const { name, description } = req.body;
+  // validate data
 
-	//validate data
   // db.collections.updateOne({_id:id}, {$set})
   // const course = await Course.findById(id);
   // course.name = name;
   // course.description = description;
-  // await course.save(); --触发mongodb自带的数据验证 同一项目一种方法
-	
+  // await course.save();
+
   const course = await Course.findByIdAndUpdate(
     id,
     { name, description },
     { new: true }
-  );
-  exec();
+  ).exec();
   if (!course) {
-    return res.status(404).json({ error: "Course not found" });
+    return res.status(404).json({ error: 'course not found' });
   }
   return res.json(course);
 }
+
 async function deleteCourseById(req, res) {
   const { id } = req.params;
   const course = await Course.findByIdAndDelete(id).exec();
   if (!course) {
-    return res.status(404).json({ error: "course not found" });
+    return res.status(404).json({ error: 'course not found' });
   }
-  // TODO remove course ref in student collection
+  // remove course ref in student collection
   return res.sendStatus(204);
 }
 
 module.exports = {
-	getAllCourses,
-	getCourseById,
-	addCourse,
-	updateCourseById,
-	deleteCourseById
+  getAllCourses,
+  getCourseById,
+  addCourse,
+  updateCourseById,
+  deleteCourseById,
 };
-

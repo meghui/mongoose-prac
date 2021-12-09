@@ -1,9 +1,9 @@
-const authGuard = require("../../../src/middleware/authGuard");
-const { validateToken } = require("../../../src/utils/jwt");
-jest.mock("../../../src/utils/jwt");
+const authGuard = require('../../../src/middleware/authGuard');
+const { validateToken } = require('../../../src/utils/jwt');
+jest.mock('../../../src/utils/jwt');
 
-describe("auth guard middleware", () => {
-  it("should return 401 if authorization header is missing", () => {
+describe('auth guard middleware', () => {
+  it('should return 401 if authorization header is missing', () => {
     const req = {
       header: jest.fn(),
     };
@@ -13,12 +13,12 @@ describe("auth guard middleware", () => {
     const next = jest.fn();
     authGuard(req, res, next);
 
-    expect(req.header).toHaveBeenCalledWith("Authorization");
+    expect(req.header).toHaveBeenCalledWith('Authorization');
     expect(res.sendStatus).toHaveBeenCalledWith(401);
   });
 
-  it("should call next when token is valid", () => {
-    const token = "xxxxx";
+  it('should call next when token is valid', () => {
+    const token = 'xxxxx';
     const req = {
       // Bearer xxxxxxxx
       header: jest.fn().mockReturnValue(`Bearer ${token}`),

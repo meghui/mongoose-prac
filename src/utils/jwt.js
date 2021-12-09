@@ -1,11 +1,11 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 const { JWT_KEY } = process.env;
 
 // refresh token
 // access token
 function generateToken(payload) {
-  return jwt.sign(payload, JWT_KEY, { expiresIn: "1s" });
+  return jwt.sign(payload, JWT_KEY, { expiresIn: '1s' });
 }
 
 function validateToken(token) {

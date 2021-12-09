@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-const bcrypt = require("bcrypt");
+const { Schema, model } = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const schema = new Schema({
   username: {
@@ -21,7 +21,7 @@ schema.methods.validatePassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-const Model = model("User", schema);
+const Model = model('User', schema);
 
 module.exports = Model;
 
@@ -31,7 +31,7 @@ module.exports = Model;
  *
  * 哈希 -> hash (不可逆)
  *
+ *
  * 加盐
  * salt
- *
  */
